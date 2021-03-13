@@ -6,11 +6,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.MoM.dto.OrganizationMemberDto;
+import com.example.MoM.dto.formDto.LoggedInMemberDto;
 import com.example.MoM.dto.formDto.LoginCredentials;
 import com.example.MoM.entity.OrganizationMemberEntity;
 import com.example.MoM.repositories.OrganizationMemberRepository;
 
+/**
+ * Controller to 
+ * 
+ * @author Pranay Raju
+ *
+ */
 @RestController
 public class LoginController {
 
@@ -21,15 +27,18 @@ public class LoginController {
 	ModelMapper mapper;
 
 	@PostMapping("/userWithCredentials")
-	public OrganizationMemberDto fetchUserWithCredentials(@RequestBody LoginCredentials credentials) {
+	public LoggedInMemberDto fetchUserWithCredentials(@RequestBody LoginCredentials credentials) {
 		
-		OrganizationMemberEntity entity = memberRepository
+		OrganizationMemberEntity memberEntity = memberRepository
 				.findByLoginIdAndPassword(credentials.getLoginId(), credentials.getPassword())
 				.orElse(new OrganizationMemberEntity());
 		
-		OrganizationMemberDto dto = mapper.map(entity, OrganizationMemberDto.class);
-		System.out.println(credentials);
-		return dto;
+		System.out.println("Org Data is " + memberEntity.getOrganizationEntity());
+		LoggedInMemberDto loggedInMemberDto = mapper.map(memberEntity, LoggedInMemberDto.class);
+		System.out.println("Logged In Member is " + loggedInMemberDto);
+		
+//		OrganizationMemberCrudDto dto = mapper.map(memberEntity, OrganizationMemberCrudDto.class);
+		return loggedInMemberDto;
 	}
 
 }
