@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { delay } from 'rxjs/operators';
-import { MemberService } from 'src/app/services/member.service';
-import { UserService } from 'src/app/services/user.service';
-import { OrganizationService } from '../../../services/organization.service';
+import { MemberService } from 'src/app/services/org&users/member.service';
+import { UserService } from 'src/app/services/org&users/user.service';
+import { OrganizationService } from '../../../services/org&users/organization.service';
 
 declare var jQuery: any;
 
@@ -62,8 +62,18 @@ export class ShowOrgMembersComponent implements OnInit {
 
     member.organization = this.organizationService.organizationDetails;
     console.log(member);
+    const a = await this.memberService.updateMember(member).pipe(delay(1000)).toPromise();
+    console.log("Response is " + a);
+    this.updateMembers();
+  }
+
+  async saveMember(member: any) {
+
+    member.organization = this.organizationService.organizationDetails;
+    console.log(member);
     const a = await this.memberService.saveMember(member).pipe(delay(1000)).toPromise();
     console.log("Response is " + a);
+    this.updateMembers();
   }
 
   newMember() {
